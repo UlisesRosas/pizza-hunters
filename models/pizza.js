@@ -36,14 +36,15 @@ const PizzaSchema = new Schema(
       //this enables us to use getters in the schema
       getters: true
     },
-    // we dont need ids foe virtuals
+    // we dont need ids for virtuals
     id: false
   }
 );
 // get total count of comments and replies on retrieval
 // is a virtual property 
 PizzaSchema.virtual('commentCount').get(function() {
-  return this.comments.length;
+  // reduce is tallying up the number of comments. It is an array prototype
+  return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 });
 
 // create the Pizza model using the PizzaSchema
