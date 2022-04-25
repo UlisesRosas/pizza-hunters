@@ -65,8 +65,11 @@ const handlePizzaSubmit = event => {
       alert('Pizza created successfully!');
       console.log(postResponse);
     })
+    // this gets triggered durring network failure which will help us trigger off line functiomality
     .catch(err => {
       console.log(err);
+      // this calls the saveRecord function from the idb.js file
+      saveRecord(formData);
     });
 };
 

@@ -1,5 +1,34 @@
+
 const { Schema, model, Types } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
+
+// thia ia  a sub document so we do not need to cinitialize a model for it at te end like we did with comment
+const ReplySchema = new Schema(
+  {
+     // set custom id to avoid confusion with parent comment _id
+     replyId: {
+      type: Schema.Types.ObjectId,
+      default: () => new Types.ObjectId()
+    },
+    replyBody: {
+      type: String
+    },
+    writtenBy: {
+      type: String
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: createdAtVal => dateFormat(createdAtVal)
+    }
+  },
+  {
+    toJSON: {
+      getters: true
+    }
+  }
+);
+
 
 const CommentSchema = new Schema({
   writtenBy: {
@@ -31,32 +60,6 @@ CommentSchema.virtual('replyCount').get(function() {
   return this.replies.length;
 });
 
-// thia ia  a sub document so we do not need to cinitialize a model for it at te end like we did with comment
-const ReplySchema = new Schema(
-  {
-     // set custom id to avoid confusion with parent comment _id
-     replyId: {
-      type: Schema.Types.ObjectId,
-      default: () => new Types.ObjectId()
-    },
-    replyBody: {
-      type: String
-    },
-    writtenBy: {
-      type: String
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: createdAtVal => dateFormat(createdAtVal)
-    }
-  },
-  {
-    toJSON: {
-      getters: true
-    }
-  }
-);
 
 const Comment = model('Comment', CommentSchema);
 
