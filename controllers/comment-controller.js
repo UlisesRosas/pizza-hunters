@@ -31,8 +31,8 @@ const commentController = {
       { _id: params.commentId },
       // updating the array with new info
       { $push: { replies: body } },
-      // displays the updated version instead of original
-      { new: true }
+      // displays the updated version instead of original and validates any new data
+      { new: true, runValidators: true }
     )
       .then(dbPizzaData => {
         // if no pizza data is retrieved

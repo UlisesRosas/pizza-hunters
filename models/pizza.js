@@ -6,10 +6,15 @@ const dateFormat = require('../utils/dateFormat');
 const PizzaSchema = new Schema(
   {
     pizzaName: {
-      type: String
+      type: String,
+      required: true,
+      trim: true
     },
     createdBy: {
-      type: String
+      type: String,
+      required: true,
+      // removes whitespace before and aftrer the string
+      trim: true
     },
     createdAt: {
       type: Date,
@@ -19,6 +24,9 @@ const PizzaSchema = new Schema(
     },
     size: {
       type: String,
+      required: true,
+      // enumerable means that it can be itterated over
+      enum: ['Personal', 'Small', 'Medium', 'Large', 'Extra Large'],
       default: 'Large'
     },
     toppings: [],
@@ -42,7 +50,7 @@ const PizzaSchema = new Schema(
 );
 // get total count of comments and replies on retrieval
 // is a virtual property 
-PizzaSchema.virtual('commentCount').get(function() {
+PizzaSchema.virtual('commentCount').get(function () {
   // reduce is tallying up the number of comments. It is an array prototype
   return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 });

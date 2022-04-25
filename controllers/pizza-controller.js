@@ -53,17 +53,17 @@ const pizzaController = {
 
     // update pizza by id
     updatePizza({ params, body }, res) {
-        // 'new:true' sends the updated object without it we get the old object
-        Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true })
-            .then(dbPizzaData => {
-                if (!dbPizzaData) {
-                    res.status(404).json({ message: 'No pizza found with this id!' });
-                    return;
-                }
-                res.json(dbPizzaData);
-            })
-            .catch(err => res.status(400).json(err));
-    },
+        // this new true and runValidators true makes sure that validation occurs on any new data
+        Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+          .then(dbPizzaData => {
+            if (!dbPizzaData) {
+              res.status(404).json({ message: 'No pizza found with this id!' });
+              return;
+            }
+            res.json(dbPizzaData);
+          })
+          .catch(err => res.status(400).json(err));
+      },
     // delete pizza
     deletePizza({ params }, res) {
         Pizza.findOneAndDelete({ _id: params.id })
